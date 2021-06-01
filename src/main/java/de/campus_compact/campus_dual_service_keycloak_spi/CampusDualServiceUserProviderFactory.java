@@ -12,7 +12,7 @@ import java.io.InputStream;
 public class CampusDualServiceUserProviderFactory
         implements UserStorageProviderFactory<CampusDualServiceUserProvider> {
 
-    public static final String PROVIDER_NAME = "readonly-property-file";
+    public static final String PROVIDER_NAME = "campus-dual-service";
 
     @Override
     public CampusDualServiceUserProvider create(KeycloakSession session, ComponentModel model) {
