@@ -84,20 +84,21 @@ public class CampusDualServiceUserProvider implements
 
         try {
             HttpClient client = HttpClient.newBuilder().build();
+            JSONObject req = new JSONObject();
+            req.put("username", user.getUsername());
+            req.put("password", input.getChallengeResponse());
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("http://" + campusDualServiceAddr + ":" + campusDualServicePort + "/login"))
-                    .POST(HttpRequest.BodyPublishers.ofString("{\"username\":\"" + user.getUsername() + "\",\"pw\":\"" + input.getChallengeResponse() + "\"}"))
+                    .POST(HttpRequest.BodyPublishers.ofString(req.toString()))
+                    .header("Content-Type", "application/json")
                     .build();
 
             HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            int status = response.statusCode();
-            String body = (String) response.body();
-            JSONObject json = new JSONObject(body);
-
-            if (status == 200) {
-                user.setAttribute("campus-dual-hash", Collections.singletonList(json.getString("hash")));
-                user.setFirstName(json.getString("firstName"));
-                user.setLastName(json.getString("lastName"));
+            if (response.statusCode() == 200) {
+                JSONObject res = new JSONObject(response.body());
+                user.setAttribute("campus-dual-hash", Collections.singletonList(res.getString("hash")));
+                user.setFirstName(res.getString("firstName"));
+                user.setLastName(res.getString("lastName"));
                 return true;
             }
         } catch (IOException | InterruptedException e) {
