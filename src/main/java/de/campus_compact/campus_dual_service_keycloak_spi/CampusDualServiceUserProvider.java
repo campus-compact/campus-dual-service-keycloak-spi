@@ -1,6 +1,7 @@
 package de.campus_compact.campus_dual_service_keycloak_spi;
 
 
+import org.json.JSONObject;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.credential.CredentialInput;
 import org.keycloak.credential.CredentialInputUpdater;
@@ -91,9 +92,12 @@ public class CampusDualServiceUserProvider implements
             HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             int status = response.statusCode();
             String body = (String) response.body();
+            JSONObject json = new JSONObject(body);
 
-            if (status == 200 && body.length() == 32) {
-                user.setAttribute("campus-dual-hash", Collections.singletonList(body));
+            if (status == 200) {
+                user.setAttribute("campus-dual-hash", Collections.singletonList(json.getString("hash")));
+                user.setFirstName(json.getString("firstName"));
+                user.setLastName(json.getString("lastName"));
                 return true;
             }
         } catch (IOException | InterruptedException e) {

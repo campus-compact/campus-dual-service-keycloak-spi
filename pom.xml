@@ -40,5 +40,10 @@
             <artifactId>jboss-logging</artifactId>
             <version>3.4.1.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180130</version>
+        </dependency>
     </dependencies>
 </project>
