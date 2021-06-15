@@ -93,7 +93,7 @@ public class CampusDualServiceUserProvider implements
                     .header("Content-Type", "application/json")
                     .build();
 
-            HttpResponse<?> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
                 JSONObject res = new JSONObject(response.body());
                 user.setAttribute("campus-dual-hash", Collections.singletonList(res.getString("hash")));
